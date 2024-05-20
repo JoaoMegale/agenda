@@ -25,7 +25,7 @@ def handle_input():
             end_time = None
             if start_time:  # Se uma hora inicial for fornecida, pergunta a hora de término
                 end_time = input("Hora de término (HH:MM, opcional): ")
-            category = input("Categoria: ")
+            category = input("Categoria (opcional): ")
 
             OutputManager.choose_recurrence_menu()
             recurrence = int(input())

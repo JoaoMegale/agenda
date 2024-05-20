@@ -22,7 +22,15 @@ class Calendar:
         """
         Adiciona um evento recorrente ao calendário, até a data limite.
         """
-        end_date = datetime.strptime(end_date, '%d/%m/%Y')
+        # Verifica se a data de fim é válida
+        try:
+            end_date = datetime.strptime(end_date, '%d/%m/%Y')
+        except ValueError:
+            raise ValueError(f"Data de término inválida: {end_date}")
+
+        if event.date > end_date:
+            raise ValueError("Data de término é anterior à data de início do evento.")
+        
         current_date = event.date
         event_list = []
 
@@ -60,6 +68,9 @@ class Calendar:
         """
         Adiciona um evento recorrente ao calendário X vezes.
         """
+        if num_occurrences < 1:
+            raise ValueError(f"Número de ocorrências inválido: {num_occurrences}")
+
         current_date = event.date
         occurrences = 0
         event_list = []
@@ -205,7 +216,7 @@ class Calendar:
         """
         Lista todas as categorias únicas de eventos existentes no calendário.
         """
-        return self.df['category'].dropna().unique()
+        return list(self.df['category'].dropna().unique())
     
     def edit_events_by_name(self, event_name, changes):
         """
