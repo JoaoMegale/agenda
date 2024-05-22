@@ -136,7 +136,7 @@ class Calendar:
         Lista os eventos.
         """
         if self.df.empty:
-            print("Nenhum evento cadastrado.")
+            return("Nenhum evento cadastrado.")
         else:    
             return self.df.sort_values(by='date')
     
@@ -144,11 +144,14 @@ class Calendar:
         """
         Lista todos os eventos de hoje.
         """
+        # Certifique-se de que a coluna 'date' está no formato datetime
+        self.df['date'] = pd.to_datetime(self.df['date'], errors='coerce')
+        
         today = datetime.now().date()
         events = self.df[self.df['date'].dt.date == today]
 
         if events.empty:
-            print("Nenhum evento para hoje")
+            return("Nenhum evento para hoje.")
         else:
             return events.sort_values(by='start_time')
 
@@ -156,11 +159,18 @@ class Calendar:
         """
         Lista todos os eventos de uma data específica.
         """
+        try:
+            end_date = datetime.strptime(date, '%d/%m/%Y').date() if isinstance(date, str) else date
+        except ValueError:
+            raise ValueError("Data inválida.")
+        
+        self.df['date'] = pd.to_datetime(self.df['date'], errors='coerce')
+
         specific_date = datetime.strptime(date, '%d/%m/%Y').date()
         events = self.df[self.df['date'].dt.date == specific_date]
 
         if events.empty:
-            print("Nenhum evento para a data.")
+            return("Nenhum evento para a data.")
         else:
             return events.sort_values(by='start_time')
 
@@ -168,12 +178,21 @@ class Calendar:
         """
         Lista todos os eventos que acontecem entre hoje e uma data específica.
         """
+        try:
+            end_date = datetime.strptime(date, '%d/%m/%Y').date() if isinstance(date, str) else date
+        except ValueError:
+            raise ValueError("Data inválida.")
+
         today = datetime.now().date()
-        end_date = datetime.strptime(date, '%d/%m/%Y').date()
+        
+        if end_date < today:
+            return "A data fornecida é anterior a hoje."
+        
+        self.df['date'] = pd.to_datetime(self.df['date'], errors='coerce')
         events = self.df[(self.df['date'].dt.date >= today) & (self.df['date'].dt.date <= end_date)]
 
         if events.empty:
-            print("Nenhum evento para o período")
+            return "Nenhum evento para o período."
         else:
             return events.sort_values(by=['date', 'start_time'])
     
@@ -181,12 +200,23 @@ class Calendar:
         """
         Lista todos os eventos que acontecem em dado intervalo de tempo.
         """
-        start_date = datetime.strptime(start_date, '%d/%m/%Y').date()
-        end_date = datetime.strptime(end_date, '%d/%m/%Y').date()
+        try:
+            start_date = datetime.strptime(start_date, '%d/%m/%Y').date() if isinstance(start_date, str) else start_date
+        except ValueError:
+            raise ValueError(f"Data de início inválida: {start_date}.")
+
+        try:
+            end_date = datetime.strptime(end_date, '%d/%m/%Y').date() if isinstance(end_date, str) else end_date
+        except ValueError:
+            raise ValueError(f"Data de fim inválida: {end_date}")
+
+        if end_date < start_date:
+            return "A data de fim é anterior à de início."
+        
         events = self.df[(self.df['date'].dt.date >= start_date) & (self.df['date'].dt.date <= end_date)]
 
         if events.empty:
-            print("Nenhum evento para o período")
+            return("Nenhum evento para o período.")
         else:
             return events.sort_values(by=['date', 'start_time'])
 
@@ -194,10 +224,13 @@ class Calendar:
         """
         Encontra eventos de acordo com um termo de pesquisa.
         """
+        if search_term == "":
+            return "O termo deve conter pelo menos 1 caractere."
+
         events = self.df[self.df['name'].str.contains(search_term, na=False, case=False)]
 
         if events.empty:
-            print("Nenhum evento com este nome")
+            return("Nenhum evento com este nome.")
         else:
             return events.sort_values(by=['date', 'start_time'])
 
@@ -208,7 +241,7 @@ class Calendar:
         events = self.df[self.df['category'] == category]
 
         if events.empty:
-            print("Nenhum evento para a categoria.")
+            return("Nenhum evento para a categoria.")
         else:
             return events.sort_values(by=['date', 'start_time'])
     

@@ -1,4 +1,4 @@
-from controller.input_hanlder import handle_input
+from controller.input_handler import handle_input
 
 def run():
     

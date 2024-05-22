@@ -121,36 +121,41 @@ def handle_input():
                         event_index = matching_events.index[0]
                     
                     print("Digite as novas informações para o evento. Deixe em branco para não alterar.")
+                    name = input("Novo nome: ")
                     date = input("Nova data (DD/MM/YYY): ")
                     start_time = input("Novo horário de início (HH:MM): ")
                     end_time = input("Novo horário de término (HH:MM): ")
                     category = input("Nova categoria: ")
                     
                     changes = {}
-                    if date: changes['date'] = datetime.strptime(date, '%Y-%m-%d')
+                    if name: changes['name'] = name
+                    if date: changes['date'] = datetime.strptime(date, '%d/%m/%Y')
                     if start_time: changes['start_time'] = start_time
                     if end_time: changes['end_time'] = end_time
                     if category: changes['category'] = category
                     
                     calendar.edit_event(name, event_date, changes)
                     print("Evento atualizado com sucesso!")
-                    input("enter")
+                    input("Aperte enter para voltar ao menu.")
                 
                 elif choice == 2:
                     print("Digite as novas informações para os eventos. Deixe em branco para não alterar.")
-                    date = input("Nova data (DD/MM/YYY): ")
+                    new_name = input("Novo nome: ")
+                    date = input("Nova data (DD/MM/YYY) - todos os eventos ficarão com a mesma data: ")
                     start_time = input("Novo horário de início (HH:MM): ")
                     end_time = input("Novo horário de término (HH:MM): ")
                     category = input("Nova categoria: ")
                     
                     changes = {}
-                    if date: changes['date'] = datetime.strptime(date, '%Y-%m-%d')
+                    if new_name: changes['name'] = new_name
+                    if date: changes['date'] = datetime.strptime(date, '%d/%m/%Y')
                     if start_time: changes['start_time'] = start_time
                     if end_time: changes['end_time'] = end_time
                     if category: changes['category'] = category
                     
                     calendar.edit_events_by_name(name, changes)
                     print("Todos os eventos atualizados com sucesso!")
+                    input("Aperte enter para voltar ao menu.")
             else:
                 print("Nenhum evento encontrado com esse nome.")
 
