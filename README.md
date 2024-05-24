@@ -4,6 +4,7 @@
 
 - **João Luiz Lopes Megale** - 2020006671
 - **Bruno Soares e Silva** - 2021037082
+- **Gustavo Barros Borba Perdigão** - 2016006522
 
 ## Sistema
 
