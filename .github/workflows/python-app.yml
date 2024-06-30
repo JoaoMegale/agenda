@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+            
     - name: Check out repository
       uses: actions/checkout@v2
 
@@ -29,7 +30,7 @@ jobs:
         coverage xml
 
     - name: Upload coverage report to Codecov
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v4.5.0
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         files: coverage.xml
