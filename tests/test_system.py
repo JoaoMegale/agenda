@@ -49,6 +49,7 @@ class TestCalendarSystem(unittest.TestCase):
 
         # Passo 4: Remover um evento por nome
         self.calendar.remove_event_by_name('Team Meeting')
+        
 
         # Verificar se o evento foi removido
         events = self.calendar.list_all_events()
